@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #282c34;
+            font-family: Arial, sans-serif;
+            color: #ddd;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+        .left-side, .right-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .left-side {
+            background-color:#282c34;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .left-side img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .right-side {
+            background-color: #383c44;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border-left: 1px solid #ddd;
+            text-align: center;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .top-part {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .bottom-part {
+            flex: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            background-color: #282c34;
+        }
+        h4 {
+            margin: 0;
+            color: #f4e04d;
+        }
+        h3 {
+            margin: 10px 0 0 0;
+            color: #f4e04d;
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-side">
+            <img src="static/1.png" alt="Prediction">
+        </div>
+        <div class="right-side">
+            <div class="top-part">
+                <h4>The expected annual salary is:</h4>
+                <h3 id="salary">{{ prediction_text }}</h3>
+            </div>
+            <div class="bottom-part">
+                <canvas id="salaryChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const salaryElement = document.getElementById('salary');
+            const salary = parseInt(salaryElement.innerText, 10);
+            let currentSalary = 0;
+            const duration = 2000; // Duration in milliseconds
+            const steps = 100; // Number of steps for the animation
+            const delay = duration / steps;
+
+            // Line Chart setup
+            const ctx = document.getElementById('salaryChart').getContext('2d');
+            const salaryData = {
+                labels: Array.from({ length: steps }, (_, i) => i),
+                datasets: [{
+                    label: 'Predicted Salary',
+                    data: [],
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                }]
+            };
+            const salaryChart = new Chart(ctx, {
+                type: 'line',
+                data: salaryData,
+                options: {
+                    scales: {
+                        x: {
+                            display: false
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: '#444'
+                            },
+                            ticks: {
+                                color: '#f4e04d'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    animation: {
+                        duration: 0 // Disable initial animation
+                    }
+                }
+            });
+
+            function easeOutQuad(t) {
+                return t * (2 - t);
+            }
+
+            function updateSalary(step) {
+                if (step <= steps) {
+                    const progress = easeOutQuad(step / steps);
+                    currentSalary = Math.floor(progress * salary);
+                    salaryElement.innerText = currentSalary;
+                    salaryData.datasets[0].data.push(currentSalary);
+                    salaryChart.update();
+                    setTimeout(() => updateSalary(step + 1), delay);
+                } else {
+                    salaryElement.innerText = salary;
+                }
+            }
+
+            updateSalary(0);
+        });
+    </script>
+</body>
+</html>

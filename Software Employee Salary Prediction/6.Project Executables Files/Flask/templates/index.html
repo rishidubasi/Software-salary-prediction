@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" />
+    <title>Software Employee Salary Prediction</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+        }
+        .top-section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #282c34;
+            color: white;
+            text-align: center;
+        }
+        .top-section h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        .btn-scroll {
+            padding: 10px 20px;
+            font-size: 1.2em;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-scroll:hover {
+            background-color: #218838;
+        }
+        .main-section {
+            display: flex;
+            height: 100vh;
+        }
+        .left-side {
+            flex: 1;
+            background: url('static/2.png') center center no-repeat;
+            background-size: contain;
+        }
+        .right-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        form {
+            width: 100%;
+            max-width: 400px;
+            color: #333;
+        }
+        form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        form input {
+            width: calc(100% - 10px);
+            margin-bottom: 10px;
+            padding: 5px;
+        }
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-section">
+            <h1>Software Employee Salary Prediction</h1>
+            <a href="#form-section" class="btn-scroll">Get Started</a>
+        </div>
+        <div id="form-section" class="main-section">
+            <div class="left-side">
+                <!-- Image Background -->
+            </div>
+            <div class="right-side">
+                <h1>Predict Your Salary</h1>
+                <h2 style="color: #4cf50e; text-align: center">Let's Predict</h2>
+                <form action="{{ url_for('predict')}}" method="post">
+                    <label for="rating">Rating</label>
+                    <input type="text" id="rating" name="Rating" value="5" />
+
+                    <label for="company-name">Company Name</label>
+                    <input type="text" id="company-name" name="Company Name" list="companies" />
+                    <datalist id="companies">
+                        <option value="Sasken" data-value="1">Sasken</option>
+                        <option value="Millennium Technologies" data-value="2">Millennium Technologies</option>
+                        <option value="Unacademy" data-value="3">Unacademy</option>
+                        <option value="SnapBizz Cloudtech" data-value="4">SnapBizz Cloudtech</option>
+                        <option value="Appoids Tech Solutions" data-value="5">Appoids Tech Solutions</option>
+                    </datalist>
+
+                    <label for="job-title">Job Title</label>
+                    <input type="text" id="job-title" name="Job Title" list="job-titles" />
+                    <datalist id="job-titles">
+                        <option value="Android Developer" data-value="1">Android Developer</option>
+                        <option value="Intern" data-value="2">Intern</option>
+                        <option value="Contractor" data-value="3">Contractor</option>
+                    </datalist>
+
+                    <label for="salaries-reported">Salaries Reported</label>
+                    <input type="text" id="salaries-reported" name="Salaries Reported" value="3" />
+
+                    <label for="location">Location</label>
+                    <input type="text" id="location" name="Location" list="locations" />
+                    <datalist id="locations">
+                        <option value="Bangalore" data-value="1">Bangalore</option>
+                        <option value="Chennai" data-value="2">Chennai</option>
+                        <option value="Hyderabad" data-value="3">Hyderabad</option>
+                        <option value="New Delhi" data-value="4">New Delhi</option>
+                        <option value="Pune" data-value="5">Pune</option>
+                        <option value="Others" data-value="6">Others</option>
+                    </datalist>
+
+                    <label for="employment-status">Employment Status</label>
+                    <input type="text" id="employment-status" name="Employment Status" list="employment-statuses" />
+                    <datalist id="employment-statuses">
+                        <option value="Full Time" data-value="1">Full Time</option>
+                        <option value="Intern" data-value="2">Intern</option>
+                    </datalist>
+
+                    <label for="job-roles">Job Roles</label>
+                    <input type="text" id="job-roles" name="Job Roles" list="job-roles-list" />
+                    <datalist id="job-roles-list">
+                        <option value="Android" data-value="1">Android</option>
+                        <option value="Backend" data-value="2">Backend</option>
+                        <option value="Database" data-value="3">Database</option>
+                        <option value="Frontend" data-value="4">Frontend</option>
+                        <option value="iOS" data-value="5">iOS</option>
+                        <option value="Java" data-value="6">Java</option>
+                        <option value="Mobile" data-value="7">Mobile</option>
+                        <option value="SDE" data-value="8">SDE</option>
+                        <option value="Python" data-value="9">Python</option>
+                    </datalist>
+
+                    <button class="btn" type="submit">Predict</button>
+                </form>
+                <br /><br />
+                <section>
+                    <h3 style="color: blueviolet; text-align: center">
+                        {{ prediction_text }}
+                    </h3>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateValue(inputId, datalistId) {
+            var input = document.getElementById(inputId);
+            var list = document.getElementById(datalistId);
+            var options = list.options;
+
+            input.addEventListener('input', function() {
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].value === input.value) {
+                        input.value = options[i].getAttribute('data-value');
+                        break;
+                    }
+                }
+            });
+        }
+
+        updateValue('company-name', 'companies');
+        updateValue('job-title', 'job-titles');
+        updateValue('location', 'locations');
+        updateValue('employment-status', 'employment-statuses');
+        updateValue('job-roles', 'job-roles-list');
+    </script>
+</body>
+</html>
